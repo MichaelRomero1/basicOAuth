@@ -1,0 +1,10 @@
+[Unit]
+Description=Launch the Flask server
+After=network-online.target
+Wants=network-online.target/
+
+[Service]
+ExecStart=/home/truecolors/basicOAuth/.venv/bin/gunicorn --chdir /home/truecolors/basicOAuth --workers 4 --bind 0.0.0.0:8000 server:app
+
+[Install]
+WantedBy=multi-user.target

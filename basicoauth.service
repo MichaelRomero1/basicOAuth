@@ -4,7 +4,7 @@ After=network-online.target
 Wants=network-online.target/
 
 [Service]
-ExecStart=/home/romerom/basicOAuth/.venv/bin/gunicorn --chdir /home/romerom/basicOAuth --workers 4 --bind 0.0.0.0:8000 server:app
+ExecStart=/home/romerom/basicOAuth/.venv/bin/gunicorn --certfile /etc/letsencrypt/live/webapps.cs.moravian.edu/fullchain.pem --keyfile /etc/letsencrypt/live/webapps.cs.moravian.edu/privkey.pem --chdir /home/romerom/basicOAuth --workers 4 --bind 0.0.0.0:443 server:app
 
 [Install]
 WantedBy=multi-user.target

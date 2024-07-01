@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <title>True Colors Personality Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+
+<!-- OAUTH verification panel -->
+<div class="test_starter fade-in" id="verify_panel">
+
+    <h2 class="test_title">Welcome to <strong id="colorful">True Colors!</strong></h2>
+    <!-- Instructions for verification -->
+    <p>You are about to take the True Colors Personality Test!</p>
+    <p>To access the test, please sign in with your <strong id="moravian_university">Moravian University</strong> email account.</p>
+    <!-- "Sign In" button -->
+    <a href="{{ url_for('login') }}"><button type="button", class="special_button" id="verify_button">Sign In</button></a>
+</div>

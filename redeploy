@@ -1,0 +1,3 @@
+sudo systemctl stop basicoauth.service
+git pull origin main
+sudo systemctl start basicoauth.service

@@ -70,6 +70,10 @@ def callback():
     cached_session = cachecontrol.CacheControl(request_session)  # Use cachecontrol
     token_request = google.auth.transport.requests.Request(session=cached_session)
 
+    id_info = id_token.verify_oauth2_token(
+        id_token=credentials.id_token,
+        request=token_request,
+        audience=GOOGLE_CLIENT_ID)
 
     return redirect('/quiz')
 

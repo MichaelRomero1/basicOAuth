@@ -64,20 +64,6 @@ def callback():
         print(session['state'])
         print(request.args['state'])
         return abort(500)  # State does not match!
-    
-    credentials = flow.credentials
-    request_session = flow.authorized_session()
-    cached_session = cachecontrol.CacheControl(request_session)  # Use cachecontrol
-    token_request = google.auth.transport.requests.Request(session=cached_session)
-
-    id_info = id_token.verify_oauth2_token(
-        id_token=credentials.id_token,
-        request=token_request,
-        audience=GOOGLE_CLIENT_ID)
-    
-    session['google_id'] = id_info.get('sub')
-    session['name'] = id_info.get('name')
-    session['email'] = id_info.get('email')
 
     return redirect('/quiz')
 

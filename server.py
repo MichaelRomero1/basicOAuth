@@ -11,12 +11,22 @@ from google.oauth2 import id_token
 import google.auth.transport.requests
 import pip._vendor.cachecontrol as cachecontrol  # Import cachecontrol
 import time
+from flask_session import Session
+import redis
 
 
 dotenv.load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
+
+# Set up Redis for session storage
+app.config['SESSION_TYPE'] = 'redis'  # Use Redis to store session data
+app.config['SESSION_PERMANENT'] = False  # Make sessions non-permanent (expire on browser close)
+app.config['SESSION_USE_SIGNER'] = True  # Sign session cookies for extra security
+app.config['SESSION_KEY_PREFIX'] = 'session:'  # Prefix for session keys in Redis
+app.config['SESSION_REDIS'] = redis.StrictRedis(host='localhost', port=6379, db=0)  # Redis connection details
+Session(app)  # Initialize the session extension
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
@@ -58,13 +68,17 @@ def login():
 # Receive data from Google endpoint
 @app.route('/callback')
 def callback():
-    flow.fetch_token(authorization_response=request.url)
 
-    if not session['state'] == request.args['state']:
-        print(session['state'])
-        print(request.args['state'])
+    state_in_session = session.get('state')
+    state_in_request = request.args.get('state')
+
+    if not state_in_session == state_in_request:
+        print(state_in_session)
+        print(state_in_request)
         return abort(500)  # State does not match!
     
+    flow.fetch_token(authorization_response=request.url)
+
     credentials = flow.credentials
     request_session = flow.authorized_session()
     cached_session = cachecontrol.CacheControl(request_session)  # Use cachecontrol
@@ -76,6 +90,10 @@ def callback():
         id_token=credentials.id_token,
         request=token_request,
         audience=GOOGLE_CLIENT_ID)
+    
+    session['google_id'] = id_info.get('sub')
+    session['name'] = id_info.get('name')
+    session['email'] = id_info.get('email')
 
     return redirect('/quiz')
 

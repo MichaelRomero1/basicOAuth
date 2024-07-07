@@ -26,3 +26,5 @@ rsa==4.9
 urllib3==2.2.1
 Werkzeug==3.0.3
 mysql-connector-python==8.0.28
+redis
+flask-session

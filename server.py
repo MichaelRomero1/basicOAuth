@@ -104,6 +104,11 @@ def callback():
 
     return redirect('/quiz')
 
+# Route to get session data
+@app.route('/session_data')
+def session_data():
+    return jsonify(dict(session))
+
 @app.route('/')
 def index():
     return render_template("index.html")

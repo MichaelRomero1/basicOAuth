@@ -65,6 +65,14 @@ def login():
     session['state'] = state
     return redirect(authorization_url)
 
+# Clear login session from the user
+@app.route('/logout') 
+def logout():
+    #session.clear()
+    for key in list(session.keys()):
+        session.pop(key)
+    return redirect('/')
+
 # Receive data from Google endpoint
 @app.route('/callback')
 def callback():
@@ -84,12 +92,11 @@ def callback():
     cached_session = cachecontrol.CacheControl(request_session)  # Use cachecontrol
     token_request = google.auth.transport.requests.Request(session=cached_session)
 
-    time.sleep(2)
-
     id_info = id_token.verify_oauth2_token(
         id_token=credentials.id_token,
         request=token_request,
-        audience=GOOGLE_CLIENT_ID)
+        audience=GOOGLE_CLIENT_ID,
+        clock_skew_in_seconds=10)
     
     session['google_id'] = id_info.get('sub')
     session['name'] = id_info.get('name')

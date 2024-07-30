@@ -20,7 +20,7 @@ oauth.register(
     authorize_params=None,
     api_base_url='https://www.googleapis.com/oauth2/v1/',
     client_kwargs={'scope': 'openid profile email'},
-    jwks_uri = "https://www.googleapis.com/oauth2/v3/certs"
+    jwks_uri = "https://www.googleapis.com/oauth2/v3/certs",
     clock_skew_in_seconds = 10
 )
 
